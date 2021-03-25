@@ -1,16 +1,15 @@
 <template>
   <div class="container">
     <div class="main-container">
-      <img class="close-btn" src="~@/common/img/close.png" @click="backPrev" />
       <div class="header">PPAP</div>
       <div class="main">
         <div class="account">
           <img src="~@/common/img/email.png" alt="">
-          <input type="text" v-model="email" @keyup.enter="login" placeholder="请输入邮箱" />
+          <input type="text" v-model="user.email" @keyup.enter="handleLogin" placeholder="请输入邮箱" />
         </div>
         <div class="password">
           <img src="~@/common/img/password.png" alt="">
-          <input type="password" v-model="password" @keyup.enter="login" placeholder="请输入密码" />
+          <input type="password" v-model="user.password" @keyup.enter="handleLogin" placeholder="请输入密码" />
         </div>
         <div class="login">
           <div @click="handleLogin">登录</div>
@@ -22,28 +21,42 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
+import { useStore } from 'vuex'
+import { key } from '@/store'
 import { login } from '@/api/user'
+
+function useLogin () {
+  const store = useStore(key)
+  const user = reactive({
+    email: '',
+    password: ''
+  })
+
+  const handleLogin = async () => {
+    try {
+      const res = await login({
+        user
+      })
+      console.log(res.data.user)
+      // 将数据存到 store 中
+      store.commit('setUser', res.data.user)
+    } catch (error) {
+      console.log('登录错误', error)
+    }
+  }
+
+  return {
+    user,
+    handleLogin
+  }
+}
 
 export default defineComponent({
   name: 'Login',
   setup () {
-    const user = reactive({
-      email: '',
-      password: ''
-    })
-
-    const handleLogin = async () => {
-      try {
-        const res = login(user)
-        console.log(res)
-      } catch (error) {
-        console.log('登录错误', error)
-      }
-    }
-
+    const data = useLogin()
     return {
-      ...user,
-      handleLogin
+      ...data
     }
   }
 })
