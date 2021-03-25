@@ -1,5 +1,5 @@
 import { InjectionKey } from 'vue'
-import { createStore, Store } from 'vuex'
+import { createStore, Store, useStore as baseUseStore } from 'vuex'
 
 interface User {
   email: string,
@@ -37,3 +37,8 @@ export const store = createStore<State>({
   modules: {
   }
 })
+
+// define your own `useStore` composition function
+export function useStore () {
+  return baseUseStore(key)
+}

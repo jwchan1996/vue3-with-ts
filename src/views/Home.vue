@@ -10,8 +10,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import HelloWorld from '@/components/HelloWorld.vue' // @ is an alias to /src
-import { useStore } from 'vuex'
-import { key } from '@/store'
+import { useStore } from '@/store'
 
 export default defineComponent({
   name: 'Home',
@@ -19,7 +18,7 @@ export default defineComponent({
     HelloWorld
   },
   setup () {
-    const store = useStore(key)
+    const store = useStore()
     return {
       user: {
         ...store.state.user

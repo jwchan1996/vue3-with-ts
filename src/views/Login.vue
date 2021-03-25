@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="main-container">
-      <div class="header">PPAP</div>
+      <div class="header">登录 realworld 账号</div>
       <div class="main">
         <div class="account">
           <img src="~@/common/img/email.png" alt="">
@@ -21,12 +21,13 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '@/store'
+import { useRouter } from 'vue-router'
+import { useStore } from '@/store'
 import { login } from '@/api/user'
 
 function useLogin () {
-  const store = useStore(key)
+  const store = useStore()
+  const router = useRouter()
   const user = reactive({
     email: '',
     password: ''
@@ -40,6 +41,8 @@ function useLogin () {
       console.log(res.data.user)
       // 将数据存到 store 中
       store.commit('setUser', res.data.user)
+      alert('登陆成功')
+      router.push('/')
     } catch (error) {
       console.log('登录错误', error)
     }
